@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance Analyzer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 70%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+    <h1>📊 Student Performance Analyzer</h1>
+
+    <h2>Mean Scores</h2>
+    <ul>
+        {% for subject, score in mean.items() %}
+            <li>{{ subject }}: {{ score }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Median Scores</h2>
+    <ul>
+        {% for subject, score in median.items() %}
+            <li>{{ subject }}: {{ score }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Top 5 Performers (Math)</h2>
+    <table>
+        <tr>
+            <th>Gender</th>
+            <th>Math</th>
+            <th>Reading</th>
+            <th>Writing</th>
+        </tr>
+        {% for student in top %}
+        <tr>
+            <td>{{ student['gender'] }}</td>
+            <td>{{ student['math score'] }}</td>
+            <td>{{ student['reading score'] }}</td>
+            <td>{{ student['writing score'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Graph Example</h2>
+    <img src="C:\Users\fathi\OneDrive\Desktop\projects\test\nimra\static\math_scores.png" alt="Math Scores Distribution" width="500">
+</body>
+</html>
