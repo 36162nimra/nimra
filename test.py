@@ -15,5 +15,6 @@ def test_function():
     # Check if there are any NaN values left
     assert df_filled.isnull().sum().sum() == 0, "There are still NaN values in the DataFrame"
 
-    print("Test passed: All NaN values have been filled.")
+    print("jhebfjs")
     print(df_filled)
+
