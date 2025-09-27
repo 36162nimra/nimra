@@ -1,51 +1,194 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Student Performance Analyzer</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
-        h1 { color: #333; }
-        table { border-collapse: collapse; width: 70%; margin-bottom: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #4CAF50; color: white; }
-    </style>
+  <meta charset="utf-8">
+  <title>Student Performance Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* Body & Fonts */
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin:0;
+      background: linear-gradient(135deg,#e6ecf5,#ffffff);
+      color:#222;
+      animation: bgShift 15s infinite alternate;
+    }
+    @keyframes bgShift {
+      0% { background-position:0% 50%; }
+      100% { background-position:100% 50%; }
+    }
+
+    /* Header */
+    header {
+      background:#001f4d;
+      color:white;
+      padding:30px 20px;
+      text-align:center;
+      box-shadow:0 6px 15px rgba(0,0,0,0.2);
+      border-bottom-left-radius:20px;
+      border-bottom-right-radius:20px;
+    }
+    header h1 { margin:0; font-size:2.3rem; letter-spacing:1px; }
+    header .small { font-size:0.95rem; opacity:0.8; }
+
+    /* Container */
+    .container { width:90%; max-width:1200px; margin:30px auto; }
+
+    /* Cards */
+    section.card {
+      background: linear-gradient(145deg,#ffffff,#f3f7ff);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 10px 20px rgba(0,0,0,0.08);
+      margin-bottom:25px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    section.card:hover {
+      transform: translateY(-5px);
+      box-shadow:0 15px 25px rgba(0,0,0,0.12);
+    }
+
+    h2 {
+      color:#001f4d;
+      margin:0 0 16px 0;
+      border-left:6px solid #001f4d;
+      padding-left:12px;
+      display:inline-block;
+      font-size:1.4rem;
+    }
+
+    /* Info Cards */
+    .card-grid { display:flex; gap:18px; flex-wrap:wrap; justify-content:flex-start; }
+    .info-card {
+      flex:1 1 220px;
+      background: linear-gradient(145deg,#f0f4ff,#dce6ff);
+      border-left:6px solid #001f4d;
+      padding:18px;
+      border-radius:12px;
+      text-align:center;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .info-card:hover {
+      transform: translateY(-6px);
+      background: linear-gradient(145deg,#dce6ff,#b8d1ff);
+    }
+    .info-card strong { display:block; color:#001f4d; font-size:1.2rem; margin-bottom:12px; }
+
+    /* Metrics Grid */
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      font-size:0.95rem;
+    }
+    .metrics div {
+      display:flex;
+      justify-content:space-between;
+      background:#fff;
+      padding:8px 10px;
+      border-radius:8px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.08);
+      transition: background 0.25s;
+    }
+    .metrics div:hover { background:#e0ebff; }
+    .metrics div span:last-child {
+      font-weight:600;
+      color:#001f4d;
+    }
+
+    /* Tables */
+    table { width:100%; border-collapse:collapse; margin-top:12px; border-radius:10px; overflow:hidden; }
+    th, td { padding:14px; text-align:center; }
+    th { background:#001f4d; color:white; }
+    tr { background:#f9faff; transition: background 0.25s; }
+    tr:hover { background:#dce6ff; }
+
+    /* Graphs */
+    .graphs { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-top:16px; }
+    img.plot { border-radius:14px; box-shadow:0 10px 20px rgba(0,0,0,0.12); max-width:100%; height:auto; }
+
+    /* Subjects needing improvement */
+    ul.needs { padding-left:20px; font-size:0.95rem; }
+    ul.needs li { margin-bottom:6px; }
+
+    /* Footer */
+    footer { text-align:center; margin:40px 0; color:#666; font-size:0.9rem; }
+  </style>
 </head>
 <body>
+  <header>
     <h1>📊 Student Performance Analyzer</h1>
+    <p class="small">Shows mean, median, mode, std dev, top performers and subjects needing improvement.</p>
+  </header>
 
-    <h2>Mean Scores</h2>
-    <ul>
-        {% for subject, score in mean.items() %}
-            <li>{{ subject }}: {{ score }}</li>
+  <div class="container">
+
+    <!-- Creative Summary Card -->
+    <section class="card">
+      <h2>Summary: Mean • Median • Mode • Std Dev</h2>
+      <div class="card-grid">
+        {% for subject, value in mean.items() %}
+          <div class="info-card">
+            <strong>{{ subject }}</strong>
+            <div class="metrics">
+              <div><span>Mean</span><span>{{ "%.2f"|format(value) }}</span></div>
+              <div><span>Median</span><span>{{ "%.2f"|format(median[subject]) }}</span></div>
+              <div><span>Mode</span><span>{{ mode[subject] }}</span></div>
+              <div><span>Std Dev</span><span>{{ "%.2f"|format(std[subject]) }}</span></div>
+            </div>
+          </div>
         {% endfor %}
-    </ul>
+      </div>
+    </section>
 
-    <h2>Median Scores</h2>
-    <ul>
-        {% for subject, score in median.items() %}
-            <li>{{ subject }}: {{ score }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Top 5 Performers (Math)</h2>
-    <table>
+    <section class="card">
+      <h2>Top 5 Performers (by Math)</h2>
+      <table>
         <tr>
-            <th>Gender</th>
-            <th>Math</th>
-            <th>Reading</th>
-            <th>Writing</th>
+          <th>Gender</th><th>Math</th><th>Reading</th><th>Writing</th>
         </tr>
-        {% for student in top %}
+        {% for s in top %}
         <tr>
-            <td>{{ student['gender'] }}</td>
-            <td>{{ student['math score'] }}</td>
-            <td>{{ student['reading score'] }}</td>
-            <td>{{ student['writing score'] }}</td>
+          <td>{{ s['gender'] }}</td>
+          <td>{{ s['math score'] }}</td>
+          <td>{{ s['reading score'] }}</td>
+          <td>{{ s['writing score'] }}</td>
         </tr>
         {% endfor %}
-    </table>
+      </table>
+    </section>
 
-    <h2>Graph Example</h2>
-    <img src="C:\Users\fathi\OneDrive\Desktop\projects\test\nimra\static\math_scores.png" alt="Math Scores Distribution" width="500">
+    <section class="card">
+      <h2>Subjects Needing Improvement</h2>
+      <p class="small">Subjects with mean below the overall subject mean (lowest first):</p>
+      <ul class="needs">
+        {% if needs %}
+          {% for subject, val in needs.items() %}
+            <li><strong>{{ subject }}</strong> — mean: {{ "%.2f"|format(val) }}</li>
+          {% endfor %}
+        {% else %}
+          <li>All subjects are at or above the overall mean — good job!</li>
+        {% endif %}
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Graphs</h2>
+      <div class="graphs">
+        <div>
+          <img class="plot" src="{{ url_for('static', filename=math_img) }}" alt="Math scores histogram">
+          <div class="small" style="text-align:center;">Distribution of Math Scores</div>
+        </div>
+        <div>
+          <img class="plot" src="{{ url_for('static', filename=mean_img) }}" alt="Mean by subject">
+          <div class="small" style="text-align:center;">Mean by Subject</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <small>Built with Flask • Pandas • Matplotlib</small>
+    </footer>
+  </div>
 </body>
 </html>
